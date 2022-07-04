@@ -101,11 +101,7 @@ impl SnakeGame {
     }
 
     pub fn move_food_to_random(&self) {
-        let food = (
-            random_range(0, self.width.get()),
-            random_range(0, self.height.get()),
-        );
-        self.food.set(food);
+        self.add_food();
     }
 
     #[allow(dead_code)]
@@ -160,21 +156,12 @@ impl SnakeGame {
         let head = self.snake.borrow()[0];
 
         (1..=self.speed.get()).for_each(|step| {
-            let mut p = (0, 0);
-            match self.direction.get() {
-                Direction::Up => {
-                    (p.0, p.1) = (head.0, head.1 - step);
-                }
-                Direction::Down => {
-                    (p.0, p.1) = (head.0, head.1 + step);
-                }
-                Direction::Left => {
-                    (p.0, p.1) = (head.0 - step, head.1);
-                }
-                Direction::Right => {
-                    (p.0, p.1) = (head.0 + step, head.1);
-                }
-            }
+            let p = match self.direction.get() {
+                Direction::Up => (head.0, head.1 - step),
+                Direction::Down => (head.0, head.1 + step),
+                Direction::Left => (head.0 - step, head.1),
+                Direction::Right => (head.0 + step, head.1),
+            };
             if !self.is_position_valid(p) || self.snake.borrow().contains(&p) {
                 log(&format!(
                     "set next {:?} is_position_valid: {:?}, contains: {:?}, snake: {:?}, head: {:?}",
@@ -192,44 +179,47 @@ impl SnakeGame {
                 return;
             }
 
-            // TODO: if meet food
             self.snake.borrow_mut().push_front(p);
+            // if meet food
             let food = self.food.get();
-            if food != head {
+            (food != head).then(|| {
                 self.snake.borrow_mut().pop_back();
-            } else {
-                // update food position
+            }).or_else(|| {  
                 self.add_food();
-                // self.food.set((
-                //     random_range(0, self.width.get()),
-                //     random_range(0, self.height.get()),
-                // ));
-                // TODO: update speed
-                // can just be 1 2 3 4, it will be a disaster
-                // self.speed.set(self.snake.borrow().len() / 10 + 1);
-            }
-            // self.frame_per_tick.set(
-            //     self.frame_per_tick.get() - self.snake.borrow().len() / 10
-            // );
+                None
+            });
+
+            // if food != head {
+            //     self.snake.borrow_mut().pop_back();
+            // } else {
+            //     // update food position
+            //     self.add_food();
+            //     // self.food.set((
+            //     //     random_range(0, self.width.get()),
+            //     //     random_range(0, self.height.get()),
+            //     // ));
+            //     // TODO: update speed
+            //     // can just be 1 2 3 4, it will be a disaster
+            //     // self.speed.set(self.snake.borrow().len() / 10 + 1);
+            // }
+            self.frame_per_tick.set(
+                self.frame_per_tick.get() - self.snake.borrow().len() / 10
+            );
         });
         self
     }
 
     fn add_food(&self) {
-        let mut food = (
-            random_range(0, self.width.get()),
-            random_range(0, self.height.get()),
-        );
         loop {
-            if !self.snake.borrow().contains(&food) {
-                break;
-            }
-            (food.0, food.1) = (
+            let food = (
                 random_range(0, self.width.get()),
                 random_range(0, self.height.get()),
             );
+            if !self.snake.borrow().contains(&food) {
+                self.food.set(food);
+                break;
+            }
         }
-        self.food.set(food);
     }
 
     pub fn set_scale(&self, scale: usize) {
