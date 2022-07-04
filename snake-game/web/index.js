@@ -102,6 +102,8 @@ async function main() {
     // 1 - KeyDown
     // 2 - KeyLeft
     // 3 - KeyRight
+    // 4 - Space
+    // 5 - Enter
     let r = 0;
 
     switch (e.key) {
@@ -124,7 +126,10 @@ async function main() {
       case ' ':
         console.log('is empty');
         r = 4;
-        break
+        break;
+      case 'Enter':
+        r = 5;
+        break;
       // other key not response
       default:
         return;

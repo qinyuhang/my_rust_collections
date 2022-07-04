@@ -33,7 +33,8 @@ pub fn handle_key(key: usize) {
     // 2 - ArrowLeft
     // 3 - ArrowRight
     // 4 - Space - toggle_pause
-    let dir = match key {
+    // 5 - Enter - restart
+    (match key {
         0 => Some(snake::Direction::Up),
         1 => Some(snake::Direction::Down),
         2 => Some(snake::Direction::Left),
@@ -53,14 +54,20 @@ pub fn handle_key(key: usize) {
             });
             None
         }
+        5 => {
+            GAME.with(|game| {
+                game.borrow().restart();
+            });
+            None
+        }
         // this will never happend
         _ => None,
-    };
-    if dir.is_some() {
+    })
+    .map(|direction| {
         GAME.with(|game| {
-            game.borrow().change_direction(dir.unwrap());
+            game.borrow().change_direction(direction);
         });
-    }
+    });
 }
 
 #[wasm_bindgen]
