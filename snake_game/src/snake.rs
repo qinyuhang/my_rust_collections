@@ -1,13 +1,6 @@
-use crate::random::random_range;
+use game_utils::{random_range, log};
 use std::cell::{Cell, RefCell};
 use std::collections::VecDeque;
-use wasm_bindgen::prelude::*;
-
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
 
 pub type Position = (usize, usize);
 
@@ -106,10 +99,16 @@ impl SnakeGame {
 
     #[allow(dead_code)]
     /// get the score of the snake
+    /// 
     pub fn score(&self) -> usize {
         self.snake.borrow().len()
     }
 
+    /// ```rust
+    /// let game = snake_game::snake::SnakeGame::default();
+    /// game.change_direction(snake_game::snake::Direction::Up);
+    /// assert_eq!(game.next_direction.get(), snake_game::snake::Direction::Up);
+    /// ```
     pub fn change_direction(&self, dir: Direction) -> &Self {
         if self.is_finished.get() {
             return self;
@@ -124,6 +123,10 @@ impl SnakeGame {
         self
     }
 
+    /// ```rust
+    /// let game = snake_game::snake::SnakeGame::default();
+    /// assert_eq!(game.is_position_valid((1,1)), true);
+    ///  ```
     pub fn is_position_valid(&self, p: Position) -> bool {
         p.0 >= 0 && p.1 >= 0 && p.0 < self.width.get() && p.1 < self.height.get()
     }
@@ -175,7 +178,7 @@ impl SnakeGame {
                 return;
             }
             if self.is_finished.get() {
-                // log(&format!("set next {:?}", p));
+                log(&format!("next_frame is_finished,set next {:?}", p));
                 return;
             }
 
@@ -202,9 +205,11 @@ impl SnakeGame {
             //     // can just be 1 2 3 4, it will be a disaster
             //     // self.speed.set(self.snake.borrow().len() / 10 + 1);
             // }
-            self.frame_per_tick.set(
-                self.frame_per_tick.get() - self.snake.borrow().len() / 10
-            );
+            // dont konw why this code will cause the snake go fast but stucked
+            // self.frame_per_tick.set(
+            //     self.frame_per_tick.get() - self.snake.borrow().len() / 10
+            // );
+            log(&format!("try set frame_per_tick: {}", self.frame_per_tick.get() - self.snake.borrow().len() / 10));
         });
         self
     }

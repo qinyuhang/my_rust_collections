@@ -1,0 +1,2 @@
+[workspace]
+members = ["snake_game", "game_utils"]

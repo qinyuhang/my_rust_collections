@@ -1,7 +1,6 @@
 // TODO: add random to generate food position
-mod random;
-mod snake;
-mod utils;
+pub mod snake;
+pub mod utils;
 
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
@@ -105,4 +104,13 @@ pub fn resize(width: usize, height: usize) {
     GAME.with(|game| {
         game.borrow().resize(width, height);
     });
+}
+
+#[wasm_bindgen]
+pub fn get_is_finshed() -> bool {
+    let mut t = false;
+    GAME.with(|game| {
+        t = game.borrow().is_finished.get();
+    });
+    t
 }

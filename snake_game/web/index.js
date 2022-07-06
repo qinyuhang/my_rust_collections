@@ -1,7 +1,8 @@
 import init, {
-  generate_game, get_png, next_frame, set_scale, handle_key, get_png_with_scale, resize,
+  generate_game, get_png, next_frame, set_scale, handle_key, get_png_with_scale, resize, get_is_finshed
 } from './pkg/snake_game.js';
 
+window.get_is_finshed = get_is_finshed;
 const scale = 10;
 async function main() {
 
