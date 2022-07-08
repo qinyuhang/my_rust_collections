@@ -4,7 +4,7 @@ import init, {
 
 window.get_is_finshed = get_is_finshed;
 
-const scale = 10;
+const scale = (window.devicePixelRatio || 1) * 4;
 
 async function main() {
 
