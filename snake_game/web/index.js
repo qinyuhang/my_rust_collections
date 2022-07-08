@@ -3,7 +3,9 @@ import init, {
 } from './pkg/snake_game.js';
 
 window.get_is_finshed = get_is_finshed;
+
 const scale = 10;
+
 async function main() {
 
   // for requestAnimationFrame
@@ -60,11 +62,10 @@ async function main() {
 
       next_frame();
       render(context, data, width, height);
-      return requestAnimationFrame(tick);
+      tickId = requestAnimationFrame(tick);
     }
 
-    tickId = tick();
-
+    tick();
   }
 
   // loop(cWidth, cHeight, get_png);
@@ -73,6 +74,7 @@ async function main() {
   let timerId;
 
   function handleResize() {
+    console.log('try cancelAnimationFrame:', tickId);
     window.cancelAnimationFrame(tickId);
     tickId = null;
     let [width, height] = [window.innerWidth, window.innerHeight];
@@ -82,15 +84,13 @@ async function main() {
     canvas.width = cw * scale;
     canvas.height = ch * scale;
 
-    resize(cw * scale, ch * scale);
+    resize(cw, ch);
 
     if (timerId) {
       clearTimeout(timerId);
     }
     // loop is called to many times it must has a throttle
-    timerId = setTimeout(() => {
-      loop(cw * scale, ch * scale, get_png_with_scale);
-    }, 2000);
+    loop(cw * scale, ch * scale, get_png_with_scale);
 
   }
 

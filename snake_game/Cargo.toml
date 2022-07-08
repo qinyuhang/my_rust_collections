@@ -31,9 +31,5 @@ game_utils = { path = "../game_utils" }
 [dev-dependencies]
 wasm-bindgen-test = "0.3.13"
 
-[profile.release]
-# Tell `rustc` to optimize for small code size.
-opt-level = "s"
-
 [target.'cfg(not(target_family = "wasm"))'.dependencies]
 rand = "0.8.5"
