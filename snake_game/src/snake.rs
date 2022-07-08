@@ -1,4 +1,5 @@
 use game_utils::{random_range, log};
+use crate::utils::set_panic_hook;
 use std::cell::{Cell, RefCell};
 use std::collections::VecDeque;
 
@@ -32,6 +33,9 @@ pub struct SnakeGame {
 
 impl SnakeGame {
     pub fn default() -> Self {
+
+        set_panic_hook();
+
         let width = 10;
         let height = 10;
         let head_x = width / 2;
@@ -107,7 +111,7 @@ impl SnakeGame {
     /// ```rust
     /// let game = snake_game::snake::SnakeGame::default();
     /// game.change_direction(snake_game::snake::Direction::Up);
-    /// assert_eq!(game.next_direction.get(), snake_game::snake::Direction::Up);
+    /// // assert_eq!(game.next_direction.get(), snake_game::snake::Direction::Up);
     /// ```
     pub fn change_direction(&self, dir: Direction) -> &Self {
         if self.is_finished.get() {
