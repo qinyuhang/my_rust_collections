@@ -1,0 +1,15 @@
+{
+  "name": "snake_game_full_wasm",
+  "collaborators": [
+    "qinyuhangxiaoxiang@gmail.com"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "snake_game_full_wasm_bg.wasm",
+    "snake_game_full_wasm.js",
+    "snake_game_full_wasm.d.ts"
+  ],
+  "module": "snake_game_full_wasm.js",
+  "types": "snake_game_full_wasm.d.ts",
+  "sideEffects": false
+}
