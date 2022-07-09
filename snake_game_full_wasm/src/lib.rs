@@ -12,9 +12,9 @@ use snake_game::snake::{SnakeGame, Direction};
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
-#[cfg(feature = "wee_alloc")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+//#[cfg(feature = "wee_alloc")]
+//#[global_allocator]
+//static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 fn get_window() -> web_sys::Window {
     web_sys::window().expect("no global `window` exists")
