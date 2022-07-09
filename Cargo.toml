@@ -1,5 +1,10 @@
 [workspace]
-members = ["snake_game", "snake_game_full_wasm", "game_utils"]
+members = [
+  "snake_game",
+  "snake_game_full_wasm",
+  "game_utils",
+  "repo_tools",
+]
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.
