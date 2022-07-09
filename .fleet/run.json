@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "type": "cargo",
+            "name": "",
+            "environment": , // optional
+            "dependsOn": [], // optional
+            "cargoArgs": [], // optional
+            "cargoExtraArgs": [], // optional
+            "executableArgs": [], // optional
+        }
+    ]
+}
