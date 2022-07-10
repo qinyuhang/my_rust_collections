@@ -91,7 +91,9 @@ async function main() {
       clearTimeout(timerId);
     }
     // loop is called to many times it must has a throttle
-    loop(cw * scale, ch * scale, get_png_with_scale);
+    timerId = setTimeout(() => {
+      loop(cw * scale, ch * scale, get_png_with_scale);
+    }, 100);
 
   }
 
