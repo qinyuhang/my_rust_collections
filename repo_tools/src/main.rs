@@ -49,10 +49,4 @@ cp -RL web ../dist/{};
                 .expect("msg");
         });
 
-    Command::new("sh")
-        .arg("-c")
-        .arg(&format!("pwd; git status",))
-        .stdout(Stdio::inherit())
-        .output()
-        .expect("msg");
 }
