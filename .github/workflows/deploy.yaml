@@ -1,0 +1,40 @@
+name: Deploy
+
+on: 
+  push:
+    branches:
+      - master
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build_and_test:
+    name: Rust project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: prepare gh-pages
+        run: |
+          git config user.name 'gh-pages-bot'
+          git config user.email 'gh-pages-bot@github.com'
+          git subtree add --prefix=dist origin gh-pages
+      - name: install wasm-pack
+        run: |
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          cd repo_tools;
+          cargo run;
+      - name: commit to gh-pages
+        run: |
+          git add -f dist
+          git config user.name 'gh-pages-bot'
+          git config user.email 'gh-pages-bot@github.com'
+          git commit -m "build"
+          git checkout -b gh-source
+          # git push origin `git subtree push --prefix=dist origin gh-pages`:gh-source --force
+          git push origin gh-source --force
+          git subtree push --prefix=dist origin gh-pages
+
