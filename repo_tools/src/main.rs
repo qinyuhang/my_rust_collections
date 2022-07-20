@@ -1,8 +1,8 @@
-use clap::App;
 use std::env;
+use std::fmt::format;
 /// build all wasm
 /// put all web in dist/{crate_name}
-use std::fs::{create_dir, read_to_string, remove_dir, remove_dir_all};
+use std::fs::{create_dir, read_to_string, remove_dir_all};
 use std::process::{Command, Stdio};
 //use std::path::Path;
 use toml::Value;
@@ -23,11 +23,11 @@ fn main() {
         create_dir(&dist_path).unwrap();
     });
 
-    t["workspace"]["members"]
+    let html_body = t["workspace"]["members"]
         .as_array()
         .unwrap()
         .iter()
-        .for_each(|member_name| {
+        .map(|member_name| {
             // use thread to compile
             println!("{}", member_name);
             // TODO: if is clib or rlib then compile wasm
@@ -47,6 +47,15 @@ cp -RL web ../dist/{};
                 .stdout(Stdio::inherit())
                 .output()
                 .expect("msg");
-        });
-
+            format!(
+                r#"<a herf="{}" >{}</a>"#,
+                member_name.as_str().unwrap(),
+                member_name.as_str().unwrap()
+            )
+        })
+        .collect::<String>();
+    let html = std::fs::read_to_string("./index.html").unwrap_or("".to_string());
+    let mut html = html.split("{}");
+    let html = html.next().unwrap_or("").to_string() + &html_body + html.next().unwrap_or("");
+    std::fs::write("../dist/index.html", html).unwrap();
 }
