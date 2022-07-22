@@ -48,14 +48,18 @@ cp -RL web ../dist/{};
                 .output()
                 .expect("msg");
             format!(
-                r#"<a herf="{}" >{}</a>"#,
+                r#"<li><a href="{}" >{}</a></li>"#,
                 member_name.as_str().unwrap(),
                 member_name.as_str().unwrap()
             )
         })
         .collect::<String>();
-    let html = std::fs::read_to_string("./index.html").unwrap_or("".to_string());
+    let html = std::fs::read_to_string("./src/index.html").unwrap_or("".to_string());
     let mut html = html.split("{}");
-    let html = html.next().unwrap_or("").to_string() + &html_body + html.next().unwrap_or("");
+    let html = html.next().unwrap_or("").to_string()
+        + "<ul>"
+        + &html_body
+        + "</ul>"
+        + html.next().unwrap_or("");
     std::fs::write("../dist/index.html", html).unwrap();
 }
