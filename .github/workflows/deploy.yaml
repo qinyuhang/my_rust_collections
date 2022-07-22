@@ -17,6 +17,11 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+      - name: cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features
       - name: prepare gh-pages
         run: |
           git config user.name 'gh-pages-bot'
