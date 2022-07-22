@@ -2,6 +2,7 @@
 members = [
   "snake_game",
   "snake_game_full_wasm",
+  "snake_game_full_wasm_glsl",
   "game_utils",
   "repo_tools",
 ]
