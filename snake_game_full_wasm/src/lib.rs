@@ -60,14 +60,14 @@ pub fn start() {
             .dyn_into::<web_sys::CanvasRenderingContext2d>()
             .unwrap(),
     );
-    let game = Rc::new(RefCell::new(SnakeGame::new(
+    let game = Rc::new(SnakeGame::new(
         canvas_width,
         canvas_height,
-    )));
+    ));
 
     // resize and start
 
-    game.borrow().set_scale(scale.get());
+    game.set_scale(scale.get());
 
     let frame_fn = Rc::new(RefCell::new(None));
     let g = frame_fn.clone();
@@ -79,18 +79,18 @@ pub fn start() {
     let scale_t = scale.clone();
     // use g and frame_fn two pointer to make self pointer
     *g.borrow_mut() = Some(Closure::wrap(Box::new(move || {
-        game_t.borrow().next_frame();
-        let data = game_t.borrow().get_png_with_scale();
+        game_t.next_frame();
+        let data = game_t.get_png_with_scale();
         let (canvas_width, canvas_height) =
-            (game_t.borrow().width.get(), game_t.borrow().height.get());
+            (game_t.width.get(), game_t.height.get());
 
         // log_1(&JsValue::from(format!(
         //     "in a render: data length: {}, width: {}, height: {}, game: {{ width: {}, height: {} }}",
         //     data.len(),
         //     canvas_width as u32,
         //     canvas_height as u32,
-        //     game_t.borrow().width.get(),
-        //     game_t.borrow().height.get(),
+        //     game_t.width.get(),
+        //     game_t.height.get(),
         // )));
 
         let img = web_sys::ImageData::new_with_u8_clamped_array(
@@ -135,7 +135,7 @@ pub fn start() {
         let height = window.inner_height().unwrap().as_f64().unwrap() as usize;
         let (canvas_width, canvas_height) = (width / scale_r.get(), height / scale_r.get());
 
-        game_r.borrow().resize(canvas_width, canvas_height);
+        game_r.resize(canvas_width, canvas_height);
 
         // restart loop
         tick_id_r.set(request_animation_frame(
@@ -153,13 +153,13 @@ pub fn start() {
                 // enter key
                 13 => {
                     // restart game
-                    game_k.borrow().restart();
+                    game_k.restart();
                     None
                 }
                 // space key
                 32 => {
                     // toggle_pause
-                    game_k.borrow().toggle_pause();
+                    game_k.toggle_pause();
                     // stop rAF
                     (tick_id_k.get() == -1)
                         .then(|| {
@@ -201,7 +201,7 @@ pub fn start() {
                 }
             };
             if let Some(dir) = dir {
-                game.borrow().change_direction(dir);
+                game.change_direction(dir);
             }
         }
         log_1(&JsValue::from("on key down"));

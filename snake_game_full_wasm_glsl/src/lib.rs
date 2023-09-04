@@ -97,7 +97,7 @@ pub fn start() -> Result<(), JsValue> {
             .dyn_into::<WebGl2RenderingContext>()
             .unwrap(),
     );
-    let game = Rc::new(RefCell::new(SnakeGame::new(canvas_width, canvas_height)));
+    let game = Rc::new(SnakeGame::new(canvas_width, canvas_height));
     // first clear the screen
     context.clear_color(0., 0., 0., 1.);
     context.clear(WebGl2RenderingContext::COLOR_BUFFER_BIT);
@@ -119,7 +119,7 @@ pub fn start() -> Result<(), JsValue> {
     // resize and start
     // TODO: use rAF to call gl.draw_arrays
 
-    game.borrow().set_scale(scale.get());
+    game.set_scale(scale.get());
 
     let frame_fn = Rc::new(RefCell::new(None));
     let g = frame_fn.clone();
@@ -131,7 +131,7 @@ pub fn start() -> Result<(), JsValue> {
     let scale_t = scale.clone();
     // use g and frame_fn two pointer to make self pointer
     *g.borrow_mut() = Some(Closure::wrap(Box::new(move || {
-        game_t.borrow().next_frame();
+        game_t.next_frame();
 
         context.clear(WebGl2RenderingContext::COLOR_BUFFER_BIT);
 
@@ -139,18 +139,18 @@ pub fn start() -> Result<(), JsValue> {
         let a_position = context_t.get_attrib_location(&program, "position");
         // draw food
         context_t.vertex_attrib4f(a_color as u32, 0., 1., 0., 1.);
-        let (width, height) = (game_t.borrow().width.get(), game_t.borrow().height.get());
+        let (width, height) = (game_t.width.get(), game_t.height.get());
         context_t.vertex_attrib2f(
             a_position as u32,
-            game_t.borrow().food.get().0 as f32 / width as f32,
-            game_t.borrow().food.get().1 as f32 / height as f32,
+            game_t.food.get().0 as f32 / width as f32,
+            game_t.food.get().1 as f32 / height as f32,
         );
 
         context_t.draw_arrays(WebGl2RenderingContext::POINTS, 0, 1);
 
         // TODO: get all points then draw food and snake
 
-        game_t.borrow().snake.borrow().iter().for_each(|pt| {
+        game_t.snake.borrow().iter().for_each(|pt| {
             context_t.vertex_attrib2f(
                 a_position as u32,
                 pt.0 as f32 / width as f32,
@@ -188,7 +188,7 @@ pub fn start() -> Result<(), JsValue> {
         let height = window.inner_height().unwrap().as_f64().unwrap() as usize;
         let (canvas_width, canvas_height) = (width / scale_r.get(), height / scale_r.get());
 
-        game_r.borrow().resize(canvas_width, canvas_height);
+        game_r.resize(canvas_width, canvas_height);
 
         // restart loop
         tick_id_r.set(request_animation_frame(
@@ -206,13 +206,13 @@ pub fn start() -> Result<(), JsValue> {
                 // enter key
                 13 => {
                     // restart game
-                    game_k.borrow().restart();
+                    game_k.restart();
                     None
                 }
                 // space key
                 32 => {
                     // toggle_pause
-                    game_k.borrow().toggle_pause();
+                    game_k.toggle_pause();
                     // stop rAF
                     (tick_id_k.get() == -1)
                         .then(|| {
@@ -254,7 +254,7 @@ pub fn start() -> Result<(), JsValue> {
                 }
             };
             if let Some(dir) = dir {
-                game.borrow().change_direction(dir);
+                game.change_direction(dir);
             }
         }
         log_1(&JsValue::from("on key down"));
