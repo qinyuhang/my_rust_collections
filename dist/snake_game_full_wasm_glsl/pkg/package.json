@@ -1,0 +1,15 @@
+{
+  "name": "snake_game_full_wasm_glsl",
+  "collaborators": [
+    "qinyuhangxiaoxiang@gmail.com"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "snake_game_full_wasm_glsl_bg.wasm",
+    "snake_game_full_wasm_glsl.js",
+    "snake_game_full_wasm_glsl.d.ts"
+  ],
+  "module": "snake_game_full_wasm_glsl.js",
+  "types": "snake_game_full_wasm_glsl.d.ts",
+  "sideEffects": false
+}
