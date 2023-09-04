@@ -11,5 +11,7 @@
   ],
   "module": "snake_game.js",
   "types": "snake_game.d.ts",
-  "sideEffects": false
+  "sideEffects": [
+    "./snippets/*"
+  ]
 }
