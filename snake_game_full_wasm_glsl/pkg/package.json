@@ -11,5 +11,7 @@
   ],
   "module": "snake_game_full_wasm_glsl.js",
   "types": "snake_game_full_wasm_glsl.d.ts",
-  "sideEffects": false
+  "sideEffects": [
+    "./snippets/*"
+  ]
 }

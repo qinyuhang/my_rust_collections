@@ -40,26 +40,28 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly generate_game: (a: number, b: number) => void;
   readonly handle_key: (a: number) => void;
-  readonly next_frame: () => void;
   readonly set_scale: (a: number) => void;
   readonly get_png: (a: number) => void;
   readonly get_png_with_scale: (a: number) => void;
   readonly resize: (a: number, b: number) => void;
   readonly get_is_finshed: () => number;
+  readonly next_frame: () => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
-  readonly __wbindgen_free: (a: number, b: number) => void;
-  readonly __wbindgen_malloc: (a: number) => number;
-  readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
+  readonly __wbindgen_free: (a: number, b: number, c: number) => void;
+  readonly __wbindgen_malloc: (a: number, b: number) => number;
+  readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
 }
 
+export type SyncInitInput = BufferSource | WebAssembly.Module;
 /**
-* Synchronously compiles the given `bytes` and instantiates the WebAssembly module.
+* Instantiates the given `module`, which can either be bytes or
+* a precompiled `WebAssembly.Module`.
 *
-* @param {BufferSource} bytes
+* @param {SyncInitInput} module
 *
 * @returns {InitOutput}
 */
-export function initSync(bytes: BufferSource): InitOutput;
+export function initSync(module: SyncInitInput): InitOutput;
 
 /**
 * If `module_or_path` is {RequestInfo} or {URL}, makes a request and
@@ -69,4 +71,4 @@ export function initSync(bytes: BufferSource): InitOutput;
 *
 * @returns {Promise<InitOutput>}
 */
-export default function init (module_or_path?: InitInput | Promise<InitInput>): Promise<InitOutput>;
+export default function __wbg_init (module_or_path?: InitInput | Promise<InitInput>): Promise<InitOutput>;
