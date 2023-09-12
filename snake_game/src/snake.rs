@@ -1,5 +1,5 @@
-use game_utils::{random_range, log};
 use crate::utils::set_panic_hook;
+use game_utils::{log, random_range};
 use std::cell::{Cell, RefCell};
 use std::collections::VecDeque;
 
@@ -33,7 +33,6 @@ pub struct SnakeGame {
 
 impl SnakeGame {
     pub fn default() -> Self {
-
         set_panic_hook();
 
         let width = 10;
@@ -103,7 +102,7 @@ impl SnakeGame {
 
     #[allow(dead_code)]
     /// get the score of the snake
-    /// 
+    ///
     pub fn score(&self) -> usize {
         self.snake.borrow().len()
     }
@@ -191,7 +190,7 @@ impl SnakeGame {
             let food = self.food.get();
             (food != head).then(|| {
                 self.snake.borrow_mut().pop_back();
-            }).or_else(|| {  
+            }).or_else(|| {
                 self.add_food();
                 None
             });

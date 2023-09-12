@@ -5,6 +5,7 @@ members = [
   "snake_game_full_wasm_glsl",
   "game_utils",
   "repo_tools",
+  "wordle",
 ]
 
 [profile.release]
